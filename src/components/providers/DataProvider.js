@@ -11,27 +11,25 @@ export function DataProvider({ children }) {
   const [info, setInfo] = useState({});
   const [apiURL, setApiURL] = useState(API_URL);
 
-  const fetchData = async (url) => {
-    setIsFetching(true);
-    setIsError(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsFetching(true);
+      setIsError(false);
 
-    axios
-      .get(url)
-      .then(({ data }) => {
+      try {
+        const { data } = await axios.get(apiURL);
         setIsFetching(false);
         setCharacters(data.results);
         setInfo(data.info);
-      })
-      .catch((e) => {
+      } catch (e) {
         setIsFetching(false);
         setIsError(true);
         console.error(e);
-      });
-  };
+      }
+    };
 
-  useEffect(() => {
-    fetchData(apiURL);
-  }, [apiURL]);
+    fetchData();
+  }, [apiURL]); // Только apiURL как зависимость
 
   const dataValue = useMemo(
     () => ({
@@ -40,12 +38,12 @@ export function DataProvider({ children }) {
       apiURL,
       setApiURL,
       characters,
-      fetchData,
       isFetching,
       isError,
       info
     }),
-    [activePage, apiURL, characters, isFetching, isError, info, fetchData]
+    [activePage, apiURL, characters, isFetching, isError, info]
+    // fetchData удален из зависимостей
   );
 
   return (
