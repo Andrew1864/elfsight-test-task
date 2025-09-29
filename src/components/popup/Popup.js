@@ -17,13 +17,16 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
   } = content;
 
   function togglePopup(e) {
-    console.log("Вызов функции togglePopup")
-    if (e.currentTarget !== e.target) { // работает он ли
-       console.log('блок иф')
+    console.log('Вызов функции togglePopup');
+    if (e.currentTarget !== e.target) {
+      // работает он ли
+
+      console.log('блок иф');
+
       return;
     }
 
-    console.log("код после иф")
+    console.log('код после иф');
     setSettings((prevState) => ({
       ...prevState,
       visible: !prevState.visible
