@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Popup } from './popup';
 import { useData } from './providers';
@@ -19,6 +19,14 @@ export function ItemsGrid() {
       content: { ...props }
     });
   }
+
+  useEffect(() => {
+    if (popupSettings.visible) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [popupSettings.visible]);
 
   if (!characters.length) {
     return null;
