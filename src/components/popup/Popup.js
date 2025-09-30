@@ -29,12 +29,12 @@ export function Popup({ settings: { visible, content = {} }, setSettings }) {
     console.log('код после иф');
     setSettings((prevState) => ({
       ...prevState,
-      visible: !prevState.visible
+      visible: false
     }));
   }
 
   return (
-    <PopupContainer visible={visible}>
+    <PopupContainer visible={visible} onClick={togglePopup}>
       <StyledPopup>
         <CloseIcon onClick={togglePopup} />
 
