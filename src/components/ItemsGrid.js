@@ -13,20 +13,36 @@ export function ItemsGrid() {
   const { characters } = useData();
   const [popupSettings, setPopupSettings] = useState(defaultPopupSettings);
 
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.keyCode === 27 || event.key === 'Escape') {
+        setPopupSettings({
+          visible: false,
+          content: {}
+        });
+      }
+    };
+
+    if (popupSettings.visible) {
+      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', handleEscKey);
+    } else {
+      document.body.style.overflow = 'auto';
+      document.removeEventListener('keydown', handleEscKey);
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+      document.removeEventListener('keydown', handleEscKey);
+    };
+  }, [popupSettings.visible]);
+
   function cardOnClickHandler(props) {
     setPopupSettings({
       visible: true,
       content: { ...props }
     });
   }
-
-  useEffect(() => {
-    if (popupSettings.visible) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
-  }, [popupSettings.visible]);
 
   if (!characters.length) {
     return null;
@@ -41,8 +57,9 @@ export function ItemsGrid() {
           {...props}
         />
       ))}
-
-      <Popup settings={popupSettings} setSettings={setPopupSettings} />
+      {popupSettings.visible && (
+        <Popup settings={popupSettings} setSettings={setPopupSettings} />
+      )}
     </Container>
   );
 }
